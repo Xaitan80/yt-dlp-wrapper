@@ -6,6 +6,7 @@ This project provides a small Python helper script for `yt-dlp` that automatical
 
 - Python 3.8 or newer
 - [`yt-dlp`](https://github.com/yt-dlp/yt-dlp) available on your `PATH`
+- [`ffmpeg`](https://ffmpeg.org/) available on your `PATH` for stream merging/remuxing
 
 Install `yt-dlp` with pip if needed:
 
@@ -26,7 +27,7 @@ python adaptiv_downloader.py
 3. Choose an output filename (or press Enter to auto-generate one).
 4. The script downloads the best-quality stream using the fastest-performing concurrency.
 
-The script automatically adds Solidsport/Handbollplay headers when those domains are detected so that downloads succeed for those services.
+The script automatically adjusts settings for known services (Solidsport/Handbollplay, C More, TV4 Play, YouTube, and more) so that the right headers and formats are used without extra effort. For YouTube, the Android player client is selected to avoid recent SABR streaming restrictions and signature issues.
 
 ## Development Notes
 
@@ -36,11 +37,22 @@ Feel free to adjust the candidate fragment counts inside `download_best` if you 
 
 ## Add More Domains
 
-If a service requires extra request headers for `yt-dlp` to work, add it to the `HEADER_PROFILES` dictionary in `adaptiv_downloader.py`:
+If a service needs custom headers, formats, or extra flags for `yt-dlp`, extend the `DOMAIN_PROFILES` dictionary in `adaptiv_downloader.py`:
 
 1. Note the domain keyword that reliably appears in the video URL.
-2. Determine which headers are needed (e.g., User-Agent, Referer, cookies).
-3. Add an entry to `HEADER_PROFILES` with the keyword and a list of `(header, value)` tuples.
+2. Determine which settings are required (headers, preferred format string, or extra yt-dlp flags).
+3. Add an entry to `DOMAIN_PROFILES` with any of the keys `headers`, `format`, or `extra_args`. For example:
+
+   ```python
+   DOMAIN_PROFILES = {
+       "example.com": {
+           "headers": [("Referer", "https://example.com/")],
+           "format": "bestvideo+bestaudio/best",
+           "extra_args": ["--cookies-from-browser", "chrome"],
+       },
+   }
+   ```
+
 4. Test a download from that site to confirm the new profile works.
 
 Feel free to open a pull request with your additions so others benefit too.
