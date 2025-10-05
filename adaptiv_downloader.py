@@ -4,6 +4,32 @@ import os
 import time
 from datetime import datetime
 
+# Mapping of domain keywords to required request headers for yt-dlp.
+HEADER_PROFILES = {
+    "handbollplay": [
+        ("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"),
+        ("Referer", "https://handbollplay.se/"),
+    ],
+    "solidsport": [
+        ("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"),
+        ("Referer", "https://solidsport.com/"),
+    ],
+    "solidtango": [
+        ("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"),
+        ("Referer", "https://handbollplay.se/"),
+    ],
+    "cmore": [
+        ("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                       "(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"),
+        ("Referer", "https://www.cmore.se/"),
+    ],
+    "tv4play": [
+        ("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                       "(KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"),
+        ("Referer", "https://www.tv4play.se/"),
+    ],
+}
+
 def test_speed(url, fragments):
     print(f"Testing with {fragments} parallel fragments ...")
     temp_file = tempfile.NamedTemporaryFile(delete=False)
@@ -81,12 +107,11 @@ def download_best(url):
         "-o", output_name,
     ]
 
-    if "handbollplay" in url or "solidtango" in url:
-        print("Detected Solidsport/Handbollplay link - adding required headers.")
-        cmd += [
-            "--add-header", "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
-            "--add-header", "Referer: https://handbollplay.se/"
-        ]
+    for domain, headers in HEADER_PROFILES.items():
+        if domain in url:
+            print(f"Detected {domain} link - adding custom headers.")
+            for header_name, header_value in headers:
+                cmd += ["--add-header", f"{header_name}: {header_value}"]
 
     print(f"\nStarting download with {best_fragments} parallel fragments.\n")
     subprocess.run(cmd)

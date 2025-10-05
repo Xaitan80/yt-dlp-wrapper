@@ -33,3 +33,14 @@ The script automatically adds Solidsport/Handbollplay headers when those domains
 The benchmarking phase only downloads the first 20 seconds of the video to keep tests fast. Temporary files created during the benchmark are deleted automatically after each run.
 
 Feel free to adjust the candidate fragment counts inside `download_best` if you need different levels of parallelism.
+
+## Add More Domains
+
+If a service requires extra request headers for `yt-dlp` to work, add it to the `HEADER_PROFILES` dictionary in `adaptiv_downloader.py`:
+
+1. Note the domain keyword that reliably appears in the video URL.
+2. Determine which headers are needed (e.g., User-Agent, Referer, cookies).
+3. Add an entry to `HEADER_PROFILES` with the keyword and a list of `(header, value)` tuples.
+4. Test a download from that site to confirm the new profile works.
+
+Feel free to open a pull request with your additions so others benefit too.
