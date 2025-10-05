@@ -22,3 +22,4 @@ ENV/
 
 # Local environment files
 .env
+.mp4
