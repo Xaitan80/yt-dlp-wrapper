@@ -23,9 +23,11 @@ python adaptiv_downloader.py
 ```
 
 1. Paste the video URL when prompted.
-2. Wait while the script tests a handful of `--concurrent-fragments` values.
-3. Choose an output filename (or press Enter to auto-generate one).
-4. The script downloads the best-quality stream using the fastest-performing concurrency.
+2. If the site requires a login, enter a browser name (e.g., `chrome`) or a path to a cookies file so the script can reuse your authenticated session.
+3. Choose whether to print the resolved stream URLs (for example, `.m3u8` playlists) before downloading.
+4. Wait while the script tests a handful of `--concurrent-fragments` values.
+5. Choose an output filename (or press Enter to auto-generate one).
+6. The script downloads the best-quality stream using the fastest-performing concurrency.
 
 The script automatically adjusts settings for known services (Solidsport/Handbollplay, C More, TV4 Play, YouTube, and more) so that the right headers and formats are used without extra effort. For YouTube, the Android player client is selected to avoid recent SABR streaming restrictions and signature issues.
 
@@ -56,3 +58,12 @@ If a service needs custom headers, formats, or extra flags for `yt-dlp`, extend 
 4. Test a download from that site to confirm the new profile works.
 
 Feel free to open a pull request with your additions so others benefit too.
+
+## Authentication Tips
+
+Some platforms (for example, TV4 Play) restrict streams behind a paywall or login. When the script prompts for authentication, you can:
+
+- Enter a browser name supported by `yt-dlp --cookies-from-browser` (Chrome, Brave, Edge, Firefox, etc.) to pull cookies automatically.
+- Provide the path to a Netscape-format cookies file created with a browser extension or `yt-dlp --cookies-from-browser`.
+
+If neither option is supplied, only publicly accessible streams will work.
