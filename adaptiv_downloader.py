@@ -84,7 +84,7 @@ def test_speed(url, fragments, domain_profile):
         cmd = [
             "yt-dlp",
             url,
-            "-f", domain_profile["format"] or DEFAULT_FORMAT,
+            #"-f", domain_profile["format"] or DEFAULT_FORMAT,
             "--concurrent-fragments", str(fragments),
             "--no-part", "--no-overwrites",
             "--download-sections", "*00:00:00-00:00:20",
@@ -141,7 +141,7 @@ def download_best(url):
     cmd = [
         "yt-dlp",
         url,
-        "-f", domain_profile["format"] or DEFAULT_FORMAT,
+       # "-f", domain_profile["format"] or DEFAULT_FORMAT,
         "--concurrent-fragments", str(best_fragments),
         "--merge-output-format", "mp4",
         "-N", str(best_fragments),
